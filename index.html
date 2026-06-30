@@ -43,10 +43,10 @@
     .nav-logo {
       font-family: 'DM Serif Display', serif;
       color: var(--white);
-      font-size: 1.1rem;
+      font-size: 1.35rem;
+      font-weight: 700;
       letter-spacing: 0.02em;
     }
-    .nav-logo span { color: var(--accent); }
     .nav-links { display: flex; gap: 2rem; }
     .nav-links a {
       color: rgba(255,255,255,0.7);
@@ -77,10 +77,10 @@
     }
     .hero-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       gap: 4rem;
       align-items: center;
-      max-width: 1100px;
+      max-width: 860px;
       margin: 0 auto;
       width: 100%;
     }
@@ -137,34 +137,38 @@
     }
     .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
 
-    .hero-stats {
+    .hero-stats-inline {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5px;
-      background: rgba(255,255,255,0.08);
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
       border: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 2.5rem;
     }
-    .stat-box {
-      background: rgba(13,27,42,0.9);
-      padding: 2rem 1.5rem;
+    .stat-inline {
+      padding: 1.5rem 1rem;
       text-align: center;
+      border-right: 1px solid rgba(255,255,255,0.08);
     }
-    .stat-num {
+    .stat-inline:last-child { border-right: none; }
+    .stat-num-inline {
       font-family: 'DM Serif Display', serif;
-      font-size: 2.6rem;
+      font-size: 2.2rem;
       color: var(--white);
       display: block;
       line-height: 1;
     }
-    .stat-num span { color: var(--accent); }
-    .stat-label {
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.5);
+    .stat-num-inline span { color: var(--accent); }
+    .stat-label-inline {
+      font-size: 0.68rem;
+      color: rgba(255,255,255,0.45);
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      margin-top: 0.5rem;
+      margin-top: 0.4rem;
       display: block;
+      line-height: 1.4;
     }
+
+    /* HERO GRID single column now */
 
     /* SECTIONS */
     section { padding: 90px 5%; }
@@ -269,7 +273,75 @@
       letter-spacing: 0.02em;
     }
 
-    /* CASE STUDIES */
+    /* MY WORK CARDS */
+    .work-card {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      border: 1px solid var(--border);
+      margin-bottom: 2rem;
+      transition: box-shadow 0.2s;
+      overflow: hidden;
+    }
+    .work-card:hover { box-shadow: 0 8px 40px rgba(13,27,42,0.08); }
+    .work-card-left {
+      background: var(--navy);
+      padding: 2.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .work-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 3rem;
+      color: rgba(255,255,255,0.07);
+      line-height: 1;
+    }
+    .work-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .work-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem;
+      color: var(--white);
+      line-height: 1.2;
+      margin-top: auto;
+    }
+    .work-company {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.06em;
+    }
+    .work-card-right {
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+    .work-desc {
+      font-size: 0.95rem;
+      color: #3A4A5C;
+      line-height: 1.8;
+    }
+    .work-cta {
+      display: inline-block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--navy);
+      text-decoration: none;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 2px;
+      letter-spacing: 0.03em;
+      transition: color 0.2s, border-color 0.2s;
+      align-self: flex-start;
+    }
+    .work-cta:hover { color: var(--navy-light); border-color: var(--navy-light); }
+
+    /* CASE STUDIES (legacy - keep for now) */
     .cases { background: var(--white); }
     .case-card {
       border: 1px solid var(--border);
@@ -499,7 +571,7 @@
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo">Aniket<span>.</span></div>
+  <div class="nav-logo">Aniket Patil</div>
   <div class="nav-links">
     <a href="#about">About</a>
     <a href="#work">Work</a>
@@ -513,32 +585,31 @@
 <section class="hero">
   <div class="hero-grid">
     <div>
-      <p class="hero-eyebrow">Product Manager · AI & B2B SaaS</p>
-      <h1>Building products that <em>move</em> the needle</h1>
+      <h1>Good products solve problems.<br><em>Great ones change behaviour.</em></h1>
       <p class="hero-desc">
-        5+ years owning end-to-end product delivery for enterprise platforms. Currently at Boomi, shipping AI-driven automation products for global customers. Open to Senior PM roles in Amsterdam and Singapore.
+        5 years building AI-powered B2B products that actually get adopted.
       </p>
+      <div class="hero-stats-inline">
+        <div class="stat-inline">
+          <span class="stat-num-inline">5<span>+</span></span>
+          <span class="stat-label-inline">Years in Product</span>
+        </div>
+        <div class="stat-inline">
+          <span class="stat-num-inline">23<span>+</span></span>
+          <span class="stat-label-inline">Team Members Led</span>
+        </div>
+        <div class="stat-inline">
+          <span class="stat-num-inline">20<span>+</span></span>
+          <span class="stat-label-inline">Products Delivered</span>
+        </div>
+        <div class="stat-inline">
+          <span class="stat-num-inline">3</span>
+          <span class="stat-label-inline">Claude AI Skills Published</span>
+        </div>
+      </div>
       <div class="hero-cta">
-        <a href="#work" class="btn-primary">View Case Studies</a>
+        <a href="#work" class="btn-primary">View Work</a>
         <a href="#contact" class="btn-outline">Get in Touch</a>
-      </div>
-    </div>
-    <div class="hero-stats">
-      <div class="stat-box">
-        <span class="stat-num">5<span>+</span></span>
-        <span class="stat-label">Years in Product</span>
-      </div>
-      <div class="stat-box">
-        <span class="stat-num">6</span>
-        <span class="stat-label">Products Owned</span>
-      </div>
-      <div class="stat-box">
-        <span class="stat-num">50<span>+</span></span>
-        <span class="stat-label">Epics Delivered</span>
-      </div>
-      <div class="stat-box">
-        <span class="stat-num">3</span>
-        <span class="stat-label">AI Products Shipped</span>
       </div>
     </div>
   </div>
@@ -548,17 +619,17 @@
 <section class="about" id="about">
   <div class="section-inner">
     <p class="section-eyebrow">About</p>
-    <h2 class="section-title">I build for <em>outcomes</em>, not output</h2>
+    <h2 class="section-title">The person behind <em>the product</em></h2>
     <div class="about-grid fade-in">
       <div class="about-text">
         <p>
-          I'm Aniket Patil, a Product Owner at Boomi where I lead the roadmap for enterprise integration and AI-automation platforms. My work sits at the intersection of complex technical systems and real customer pain — and I care deeply about the gap between shipping something and it actually working for the people using it.
+          I build enterprise products that people actually use.
         </p>
         <p>
-          Before Boomi, I owned six API-driven B2B products simultaneously at Zibtek, drove product strategy for ed-tech platforms at INSAID, and started my PM career optimizing roadmaps at Cerebro Teams. I hold a PSPO certification and am completing an MBA in AI & Machine Learning.
+          Five years in, I've learned that the hardest part of product work isn't the roadmap or the PRD — it's deeply understanding why something isn't working for the person using it, and caring enough to fix it. I've done that across SaaS, AI platforms, and automation products, most recently at Boomi where I've shipped agentic AI products and deployed AI workflows that changed how teams plan and build.
         </p>
         <p>
-          I'm currently open to Senior PM roles in Amsterdam and Singapore — particularly in fintech, data/AI platforms, and enterprise SaaS.
+          Outside work you'll find me on a hiking trail, hunting for the best biryani in a new city, or reading about geopolitics.
         </p>
         <div class="about-tags">
           <span class="tag">End-to-End Ownership</span>
@@ -580,169 +651,33 @@
         </div>
         <div class="sidebar-block">
           <h4>Certification</h4>
-          <p>PSPO · Professional Scrum<br><small style="color:#6B7A8D;font-size:0.82rem;">Scrum.org</small></p>
-        </div>
-        <div class="sidebar-block">
-          <h4>Open To</h4>
-          <p>Amsterdam · Singapore · Remote</p>
+          <p><a href="https://www.credly.com/badges/88fa272b-b23b-4d90-839a-43e29012d9f8/public_url" target="_blank" style="color:var(--navy);text-decoration:none;font-weight:500;">PSPO · Professional Scrum ↗</a><br><small style="color:#6B7A8D;font-size:0.82rem;">Scrum.org · Verified</small></p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- METRICS -->
-<section class="metrics" id="metrics">
-  <div class="section-inner">
-    <p class="section-eyebrow">Impact</p>
-    <h2 class="section-title" style="color:white;margin-bottom:2rem;">Numbers that tell the story</h2>
-    <div class="metrics-grid fade-in">
-      <div class="metric-item">
-        <span class="metric-val">40<span>%</span></span>
-        <p class="metric-desc">Reduction in stakeholder alignment time via tighter PRD practices</p>
-      </div>
-      <div class="metric-item">
-        <span class="metric-val">30<span>%</span></span>
-        <p class="metric-desc">CSAT improvement across 6 B2B products at Zibtek</p>
-      </div>
-      <div class="metric-item">
-        <span class="metric-val">25<span>%</span></span>
-        <p class="metric-desc">Faster project turnaround through lifecycle management</p>
-      </div>
-      <div class="metric-item">
-        <span class="metric-val">15<span>%</span></span>
-        <p class="metric-desc">On-time delivery improvement via structured release planning</p>
-      </div>
-      <div class="metric-item">
-        <span class="metric-val">10<span>+</span></span>
-        <p class="metric-desc">Stakeholders aligned per PRD across engineering, compliance & commercial</p>
-      </div>
-      <div class="metric-item">
-        <span class="metric-val">50<span>+</span></span>
-        <p class="metric-desc">Epics translated across 6 API-driven B2B products</p>
-      </div>
-      <div class="metric-item">
-        <span class="metric-val">3</span>
-        <p class="metric-desc">Product teams impacted by org-wide Claude AI skills deployment</p>
-      </div>
-      <div class="metric-item">
-        <span class="metric-val">650<span>+</span></span>
-        <p class="metric-desc">Users with 25% engagement boost at INSAID via market-research-led product strategy</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CASE STUDIES -->
+<!-- MY WORK -->
 <section class="cases" id="work">
   <div class="section-inner">
-    <p class="section-eyebrow">Case Studies</p>
-    <h2 class="section-title">Three products, <em>real outcomes</em></h2>
+    <p class="section-eyebrow">My Work</p>
+    <h2 class="section-title">Products I've <em>shipped</em></h2>
 
-    <!-- Case 1 -->
-    <div class="case-card fade-in">
-      <div class="case-sidebar">
-        <div class="case-num">01</div>
-        <div>
-          <span class="case-tag">Agentic AI</span>
-          <h3>Agent Control Tower</h3>
-          <p class="case-company">Boomi · 2025</p>
-        </div>
+    <!-- Work 1 -->
+    <div class="work-card fade-in">
+      <div class="work-card-left">
+        <span class="work-num">01</span>
+        <span class="work-tag">Agentic AI · Platform</span>
+        <h3 class="work-title">Boomi Orchestrate</h3>
+        <p class="work-company">Boomi · 2025</p>
       </div>
-      <div class="case-body">
-        <div class="case-row">
-          <div class="case-section">
-            <h4>Problem</h4>
-            <p>Enterprise customers lacked visibility and control over their agentic automation workflows, leading to operational blind spots at scale.</p>
-          </div>
-          <div class="case-section">
-            <h4>My Role</h4>
-            <p>End-to-end product ownership from discovery through production — leading UX, Engineering, Content, and QA across global teams.</p>
-          </div>
-          <div class="case-section">
-            <h4>Process</h4>
-            <p>Customer discovery → PRD authoring → stakeholder alignment across 10+ functions → sprint planning → launch metrics definition.</p>
-          </div>
-          <div class="case-section">
-            <h4>Decisions Made</h4>
-            <p>Prioritized merchant activation metrics over feature count. Said no to 3 scope additions that didn't move adoption needle.</p>
-          </div>
-        </div>
-        <div class="case-outcome">
-          ✦ Outcome: Production launch delivered on schedule. Success measured by merchant adoption and activation rates post-launch, not just ship date.
-        </div>
+      <div class="work-card-right">
+        <p class="work-desc">Boomi Orchestrate is a capability within the Boomi Enterprise Platform designed to coordinate multiple disjointed systems, AI agents, data models, and APIs into cohesive, enterprise-grade business workflows. Rather than focusing on a single point-to-point integration, Orchestrate acts as the connective tissue across the entire Boomi ecosystem — bridging Integration, Data Hub, API Management, and Agentstudio into one intelligent layer.</p>
+        <a href="orchestrate.html" class="work-cta">Read full story →</a>
       </div>
     </div>
 
-    <!-- Case 2 -->
-    <div class="case-card fade-in">
-      <div class="case-sidebar">
-        <div class="case-num">02</div>
-        <div>
-          <span class="case-tag">AI Deployment</span>
-          <h3>Claude AI Skills — Org-Wide Rollout</h3>
-          <p class="case-company">Boomi · 2025</p>
-        </div>
-      </div>
-      <div class="case-body">
-        <div class="case-row">
-          <div class="case-section">
-            <h4>Problem</h4>
-            <p>Product teams were losing hours weekly to repetitive planning tasks and edge case discovery during sprint ceremonies.</p>
-          </div>
-          <div class="case-section">
-            <h4>My Role</h4>
-            <p>Designed, built, and deployed Claude AI skills across the organization — owned adoption strategy and change management.</p>
-          </div>
-          <div class="case-section">
-            <h4>Process</h4>
-            <p>Identified pain points → designed AI workflow templates → piloted with one team → iterated → scaled to 3 product teams.</p>
-          </div>
-          <div class="case-section">
-            <h4>Decisions Made</h4>
-            <p>Chose embedded workflow over standalone tool to minimize friction. Focused on planning and edge-case discovery as first use cases.</p>
-          </div>
-        </div>
-        <div class="case-outcome">
-          ✦ Outcome: Measurable reduction in edge case discovery time across 3 product teams. Improved requirements quality and planning efficiency org-wide.
-        </div>
-      </div>
-    </div>
-
-    <!-- Case 3 -->
-    <div class="case-card fade-in">
-      <div class="case-sidebar">
-        <div class="case-num">03</div>
-        <div>
-          <span class="case-tag">Platform PM</span>
-          <h3>Boomi One Platform</h3>
-          <p class="case-company">Boomi · 2025</p>
-        </div>
-      </div>
-      <div class="case-body">
-        <div class="case-row">
-          <div class="case-section">
-            <h4>Problem</h4>
-            <p>Enterprise customers struggled to onboard and activate unified integration capabilities across fragmented workflows.</p>
-          </div>
-          <div class="case-section">
-            <h4>My Role</h4>
-            <p>Owned roadmap strategy for Boomi's unified API-based integration and automation platform — aligning 10+ stakeholders globally.</p>
-          </div>
-          <div class="case-section">
-            <h4>Process</h4>
-            <p>Stakeholder interviews → activation friction mapping → PRD → engineering alignment → phased rollout → adoption tracking.</p>
-          </div>
-          <div class="case-section">
-            <h4>Decisions Made</h4>
-            <p>Reduced time-to-clarity by ~40% through PRD discipline. Cut scope to focus on activation-blocking friction first.</p>
-          </div>
-        </div>
-        <div class="case-outcome">
-          ✦ Outcome: ~40% reduction in stakeholder alignment time. Improved enterprise customer onboarding efficiency and reduced activation friction across key merchant segments.
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
