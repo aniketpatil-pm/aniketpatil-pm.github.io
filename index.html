@@ -748,21 +748,121 @@
     .photo-card-1:hover,
     .photo-card-2:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,0.15); }
 
+    /* ── TABLET (max 940px) ─────────────────────── */
     @media (max-width: 940px) {
-      .hero-inner { grid-template-columns: 1fr; }
-      .hero-photos { display: none; }
+      section { padding: 70px 5%; }
+
+      /* Hero — stack vertically, show photos below text */
+      .hero { padding: 100px 5% 60px; }
+      .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      .hero h1 { font-size: 2.4rem; }
+      .hero-sub { max-width: 100%; }
+      .hero-stats { max-width: 100%; flex-wrap: wrap; }
+      .stat-item { flex: 1 1 45%; }
+
+      /* Show photos on tablet — horizontal strip */
+      .hero-photos {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 220px;
+        gap: 10px;
+        height: auto;
+        flex-direction: unset;
+      }
+      .photo-main {
+        flex: unset;
+        height: 220px;
+        object-position: center 15%;
+      }
+      .photo-bottom-row {
+        display: contents;
+      }
+      .photo-card-1, .photo-card-2 {
+        height: 220px;
+      }
+
+      /* About */
       .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+
+      /* Work cards */
       .work-card { grid-template-columns: 1fr; }
+      .work-left { padding: 1.8rem; }
+      .work-right { padding: 1.8rem; }
+
+      /* Projects */
       .projects-grid { grid-template-columns: 1fr; }
+
+      /* Skills */
       .skills-grid { grid-template-columns: repeat(2, 1fr); }
-      .hero-stats { flex-wrap: wrap; max-width: 100%; }
+
+      /* Contact */
       .contact-section-grid { grid-template-columns: 1fr; }
-      .contact-img { display: none; }
+      .contact-img-wrap { order: -1; }
+      .contact-img { display: block; height: 220px; object-position: center 65%; }
+
+      /* Nav */
+      .nav-icon-link { display: none; }
     }
+
+    /* ── MOBILE (max 600px) ──────────────────────── */
     @media (max-width: 600px) {
+      section { padding: 60px 4%; }
+
+      /* Nav */
+      nav { padding: 0 4%; }
       .nav-links { display: none; }
-      .hero h1 { font-size: 2.2rem; }
+
+      /* Hero */
+      .hero { padding: 90px 4% 50px; }
+      .hero h1 { font-size: 2rem; line-height: 1.15; }
+      .hero-sub { font-size: 0.95rem; }
+      .hero-stats { }
+      .stat-item { flex: 1 1 45%; padding: 1rem; }
+      .stat-num { font-size: 1.6rem; }
+      .hero-btns { flex-direction: column; }
+      .btn-fill, .btn-ghost { text-align: center; }
+
+      /* Photos — 2 column on mobile */
+      .hero-photos {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        gap: 8px;
+        height: auto;
+      }
+      .photo-main {
+        grid-column: 1 / -1;
+        height: 220px;
+        object-position: center 15%;
+      }
+      .photo-card-1, .photo-card-2 {
+        height: 140px;
+      }
+
+      /* About */
+      .about-text p:first-child { font-size: 1rem; }
+      .info-block p { font-size: 0.85rem; }
+
+      /* Work */
+      .work-left { padding: 1.4rem; }
+      .work-right { padding: 1.4rem; }
+      .work-num { font-size: 2rem; }
+
+      /* Skills */
       .skills-grid { grid-template-columns: 1fr; }
+      .tools-row { gap: 1.2rem; }
+      .tool img { width: 30px; height: 30px; }
+
+      /* Contact */
+      .contact-wrap h2 { font-size: 1.8rem; }
+      .contact-img { height: 200px; }
+
+      /* Footer */
+      .ft-links { gap: 1rem; }
+      .ft-circle { width: 38px; height: 38px; }
+
+      /* Cursor — hide on touch */
+      #cursor, #cursor-ring { display: none; }
+      body { cursor: auto; }
     }
   </style>
 </head>
@@ -1030,7 +1130,6 @@
       <!-- Temple photo right side -->
       <div class="contact-img-wrap reveal reveal-d1">
         <img src="photo-temple.jpg" alt="Exploring ancient temples" class="contact-img" />
-        <p class="contact-img-caption">Exploring India's ancient temples — one trek at a time</p>
       </div>
     </div>
   </div>
