@@ -90,6 +90,14 @@
       transition: color 0.2s;
     }
     .nav-links a:hover { color: var(--ink); }
+    .nav-links-plain {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links-plain:hover { color: var(--ink); }
     .nav-icon-link {
       display: flex; align-items: center; justify-content: center;
       width: 32px; height: 32px;
@@ -696,23 +704,52 @@
     }
     .ft-name span { color: var(--emerald); }
     .ft-role { font-size: 0.78rem; color: rgba(255,255,255,0.3); margin-bottom: 1.8rem; }
-    .ft-links { display: flex; gap: 1.5rem; justify-content: center; margin-bottom: 1.8rem; flex-wrap: wrap; }
+    .ft-links { display: flex; gap: 3rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap; }
     .ft-link {
-      display: flex; flex-direction: column; align-items: center; gap: 0.45rem;
+      display: flex; flex-direction: column; align-items: center; gap: 0.65rem;
       text-decoration: none; cursor: none;
     }
     .ft-circle {
-      width: 42px; height: 42px;
-      border: 1px solid rgba(255,255,255,0.12);
+      width: 52px; height: 52px;
+      border: 1.5px solid rgba(255,255,255,0.25);
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-size: 0.95rem;
-      color: rgba(255,255,255,0.5);
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.8);
       transition: border-color 0.2s, color 0.2s, background 0.2s;
     }
     .ft-link:hover .ft-circle { border-color: var(--emerald); color: var(--emerald); background: rgba(5,150,105,0.08); }
-    .ft-link span { font-size: 0.65rem; color: rgba(255,255,255,0.25); }
+    .ft-link span {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.8);
+      font-weight: 500;
+      text-align: center;
+      transition: color 0.2s;
+    }
+    .ft-link:hover span { color: var(--white); }
     .ft-copy { font-size: 0.68rem; color: rgba(255,255,255,0.15); border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1.5rem; }
+    .ft-contact-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin: 0 auto 1.8rem;
+      padding: 1rem 1.5rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+      max-width: 640px;
+    }
+    .ft-contact-item {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .ft-contact-item:hover { color: var(--emerald); }
+    .ft-contact-sep { color: rgba(255,255,255,0.2); font-size: 1rem; }
 
     /* ── REVEAL ANIMATIONS ──────────────────────── */
     .reveal {
@@ -742,49 +779,70 @@
     .hero-photos {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      height: 520px;
+      gap: 0;
     }
     .photo-main {
       width: 100%;
-      flex: 1;
-      border-radius: 14px;
+      height: 300px;
+      border-radius: 14px 14px 0 0;
       object-fit: cover;
       object-position: center 18%;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.14);
-      border: 3px solid var(--white);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
       display: block;
-      min-height: 0;
       animation: fadeSlideUp 0.9s ease 0.5s both;
     }
-    .photo-bottom-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      height: 155px;
-      flex-shrink: 0;
-    }
-    .photo-card-1,
-    .photo-card-2 {
-      width: 100%;
-      height: 155px;
-      border-radius: 10px;
-      object-fit: cover;
-      border: 3px solid var(--white);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      display: block;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .photo-card-1 {
-      object-position: center 20%;
+    /* Hero info blocks below portrait */
+    .hero-info-blocks {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 14px 14px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
       animation: fadeSlideUp 0.9s ease 0.7s both;
     }
-    .photo-card-2 {
-      object-position: center 35%;
-      animation: fadeSlideUp 0.9s ease 0.85s both;
+    .hero-info-item {
+      padding: 0.75rem 1.2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 0.08rem;
     }
-    .photo-card-1:hover,
-    .photo-card-2:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,0.15); }
+    .hero-info-item:last-child { border-bottom: none; }
+    .hero-info-label {
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .hero-info-val {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.3;
+    }
+    .hero-info-link { color: var(--emerald); text-decoration: none; }
+    .hero-info-link:hover { text-decoration: underline; }
+    .hero-info-sub { font-size: 0.72rem; color: var(--muted); }
+    /* About hiking photos */
+    .about-right {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .about-photo {
+      width: 100%;
+      height: 195px;
+      border-radius: 10px;
+      object-fit: cover;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    .about-photo:first-child { object-position: center 30%; }
+    .about-photo:last-child  { object-position: center 40%; }
+    .about-photo:hover { transform: translateY(-3px); }
 
     /* ── TABLET (max 940px) ─────────────────────── */
     @media (max-width: 940px) {
@@ -812,12 +870,7 @@
         height: 220px;
         object-position: center 15%;
       }
-      .photo-bottom-row {
-        display: contents;
-      }
-      .photo-card-1, .photo-card-2 {
-        height: 220px;
-      }
+
 
       /* About */
       .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
@@ -872,9 +925,7 @@
         height: 220px;
         object-position: center 15%;
       }
-      .photo-card-1, .photo-card-2 {
-        height: 140px;
-      }
+
 
       /* About */
       .about-text p:first-child { font-size: 1rem; }
@@ -918,11 +969,9 @@
     <a href="#work">Work</a>
     <a href="#projects">Projects</a>
     <a href="#skills">Skills</a>
+    <a href="Resume_Aniket_Patil.pdf" download class="nav-links-plain">Resume</a>
     <a href="https://www.linkedin.com/in/aniketp1729/" target="_blank" class="nav-icon-link" title="LinkedIn">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-    </a>
-    <a href="Resume_Aniket_Patil.pdf" download class="nav-icon-link" title="Download Resume">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
     </a>
     <a href="#contact" class="nav-pill">Contact</a>
   </div>
@@ -973,9 +1022,22 @@
     <!-- Right: photo collage -->
     <div class="hero-photos">
       <img src="photo-main.jpg" alt="Aniket Patil" class="photo-main" />
-      <div class="photo-bottom-row">
-        <img src="photo-hike1.png" alt="Sunrise trek" class="photo-card-1" />
-        <img src="photo-hike2.jpg" alt="Mountain lake trek" class="photo-card-2" />
+      <div class="hero-info-blocks">
+        <div class="hero-info-item">
+          <span class="hero-info-label">Currently</span>
+          <span class="hero-info-val">Product Owner · Boomi</span>
+          <span class="hero-info-sub">Jan 2025 – Present</span>
+        </div>
+        <div class="hero-info-item">
+          <span class="hero-info-label">Education</span>
+          <span class="hero-info-val">MBA · AI & Machine Learning</span>
+          <span class="hero-info-sub">Dr. D.Y. Patil University</span>
+        </div>
+        <div class="hero-info-item">
+          <span class="hero-info-label">Certification</span>
+          <a href="https://www.credly.com/badges/88fa272b-b23b-4d90-839a-43e29012d9f8/public_url" target="_blank" class="hero-info-val hero-info-link">🏅 PSPO ↗</a>
+          <span class="hero-info-sub">Scrum.org · Verified</span>
+        </div>
       </div>
     </div>
   </div>
@@ -1002,18 +1064,8 @@
         </div>
       </div>
       <div class="about-right">
-        <div class="info-block">
-          <label>Currently</label>
-          <p>Product Owner · Boomi<small>Jan 2025 – Present</small></p>
-        </div>
-        <div class="info-block">
-          <label>Education</label>
-          <p>MBA · AI & Machine Learning<small>Dr. D.Y. Patil University</small></p>
-        </div>
-        <div class="info-block">
-          <label>Certification</label>
-          <p><a href="https://www.credly.com/badges/88fa272b-b23b-4d90-839a-43e29012d9f8/public_url" target="_blank">PSPO · Professional Scrum ↗</a><small>Scrum.org · Verified</small></p>
-        </div>
+        <img src="photo-hike1.png" alt="Sunrise trek" class="about-photo" />
+        <img src="photo-hike2.jpg" alt="Mountain lake trek" class="about-photo" />
       </div>
     </div>
   </div>
@@ -1144,24 +1196,6 @@
         <h2>Let's <em>talk</em></h2>
         <p>I am always open to collaborations and exploration.</p>
 
-        <!-- Contact info chips -->
-        <div class="contact-info-row">
-          <a href="mailto:anikpatil.mail@gmail.com" class="contact-info-chip">
-            <span class="contact-info-chip-icon">✉</span>
-            <div class="contact-info-chip-text">
-              <span>Email</span>
-              <strong>anikpatil.mail@gmail.com</strong>
-            </div>
-          </a>
-          <a href="tel:+919960214899" class="contact-info-chip">
-            <span class="contact-info-chip-icon">📞</span>
-            <div class="contact-info-chip-text">
-              <span>Phone</span>
-              <strong>+91-9960214899</strong>
-            </div>
-          </a>
-        </div>
-
         <div class="cform">
           <div id="form-msg" style="display:none;"></div>
           <form id="contact-form" action="https://formspree.io/f/mjgqaovz" method="POST" novalidate>
@@ -1196,20 +1230,22 @@
 <footer>
   <p class="ft-name">Aniket <span>Patil</span></p>
   <p class="ft-role">Product Owner · AI & B2B SaaS · Bangalore</p>
+
   <div class="ft-links">
     <a href="mailto:anikpatil.mail@gmail.com" class="ft-link">
-      <div class="ft-circle">✉</div><span>Email</span>
+      <div class="ft-circle">✉</div>
+      <span>anikpatil.mail@gmail.com</span>
     </a>
     <a href="https://www.linkedin.com/in/aniketp1729/" target="_blank" class="ft-link">
-      <div class="ft-circle">in</div><span>LinkedIn</span>
+      <div class="ft-circle">in</div>
+      <span>Aniket Patil</span>
     </a>
-    <a href="Resume_Aniket_Patil.pdf" download class="ft-link">
-      <div class="ft-circle">↓</div><span>Resume</span>
-    </a>
-    <a href="https://www.credly.com/badges/88fa272b-b23b-4d90-839a-43e29012d9f8/public_url" target="_blank" class="ft-link">
-      <div class="ft-circle">🏅</div><span>PSPO</span>
+    <a href="tel:+919960214899" class="ft-link">
+      <div class="ft-circle">📞</div>
+      <span>+91-9960214899</span>
     </a>
   </div>
+
   <p class="ft-copy">© 2026 Aniket Patil · Built with intention</p>
 </footer>
 
