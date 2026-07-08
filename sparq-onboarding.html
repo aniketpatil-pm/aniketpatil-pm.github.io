@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sparq — Get started</title>
+<style>
+  :root {
+    --navy-800: #172A4C; --navy-700: #1F3864; --navy-600: #2A4A80;
+    --navy-100: #DCE4F0; --navy-50: #EEF2F8;
+    --sky-500: #0EA5E9; --sky-50: #F0F9FF;
+    --emerald-500: #10B981; --emerald-600: #059669; --emerald-700: #047857; --emerald-50: #ECFDF5;
+    --amber-500: #F59E0B; --amber-700: #B45309; --amber-50: #FFFBEB;
+    --gray-900: #111827; --gray-700: #374151; --gray-500: #6B7280; --gray-400: #9CA3AF;
+    --gray-300: #D1D5DB; --gray-200: #E5E7EB; --gray-100: #F3F4F6; --gray-50: #F9FAFB;
+    --bg: #F7F8FA;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--gray-900); }
+  a { text-decoration: none; color: inherit; }
+
+  .topnav { border-bottom: 1px solid var(--gray-200); background: #fff; }
+  .topnav-inner { max-width: 1000px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+  .brand { display: flex; align-items: center; gap: 8px; }
+  .brand-mark { height: 28px; width: 28px; border-radius: 6px; background: var(--navy-700); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; }
+  .brand-name { font-weight: 700; color: var(--navy-800); font-size: 15px; }
+  .exit-link { font-size: 13px; color: var(--gray-500); }
+  .exit-link:hover { color: var(--navy-700); }
+
+  .container { max-width: 720px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* Progress */
+  .progress { display: flex; align-items: center; margin-bottom: 40px; }
+  .progress-step { display: flex; align-items: center; flex: 1; }
+  .progress-step:last-child { flex: 0; }
+  .progress-circle {
+    height: 32px; width: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; flex-shrink: 0; background: var(--gray-200); color: var(--gray-500);
+    transition: all 0.2s;
+  }
+  .progress-circle.active { background: var(--navy-700); color: #fff; }
+  .progress-circle.done { background: var(--emerald-500); color: #fff; }
+  .progress-label { margin-left: 10px; font-size: 13px; font-weight: 600; color: var(--gray-400); white-space: nowrap; }
+  .progress-label.active { color: var(--navy-800); }
+  .progress-line { height: 2px; flex: 1; background: var(--gray-200); margin: 0 14px; }
+  .progress-line.done { background: var(--emerald-500); }
+  @media (max-width: 640px) { .progress-label { display: none; } }
+
+  .panel { background: #fff; border: 1px solid var(--gray-200); border-radius: 16px; padding: 36px; }
+  .panel-title { font-size: 22px; font-weight: 800; color: var(--navy-800); margin: 0 0 6px; }
+  .panel-desc { font-size: 14px; color: var(--gray-500); margin: 0 0 28px; }
+
+  .card-select-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  @media (max-width: 560px) { .card-select-grid { grid-template-columns: 1fr; } }
+  .select-card {
+    border: 1.5px solid var(--gray-200); border-radius: 12px; padding: 20px; text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+  }
+  .select-card.connected { border-color: var(--emerald-500); background: var(--emerald-50); }
+  .select-icon { height: 44px; width: 44px; border-radius: 10px; background: var(--navy-50); color: var(--navy-700); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; }
+  .select-name { font-weight: 700; font-size: 15px; color: var(--gray-900); }
+  .connect-btn {
+    margin-top: 6px; border-radius: 8px; border: 1px solid var(--navy-700); background: var(--navy-700); color: #fff;
+    padding: 8px 18px; font-size: 13px; font-weight: 600; cursor: pointer; min-width: 120px;
+  }
+  .connect-btn:hover { background: var(--navy-600); }
+  .connect-btn.loading { background: var(--gray-300); border-color: var(--gray-300); color: var(--gray-500); cursor: default; }
+  .connect-status { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--emerald-700); }
+  .spinner {
+    width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--gray-300); border-top-color: var(--gray-600);
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .link-btn { background: none; border: none; color: var(--navy-700); font-size: 13px; font-weight: 600; cursor: pointer; padding: 0; text-decoration: underline; }
+  .manual-form { margin-top: 16px; padding: 16px; background: var(--gray-50); border-radius: 10px; display: none; }
+  .manual-form.open { display: block; }
+
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 6px; }
+  .field input, .field select {
+    width: 100%; border: 1px solid var(--gray-300); border-radius: 8px; padding: 10px 12px; font-size: 14px;
+    color: var(--gray-900); background: #fff; font-family: inherit;
+  }
+  .field input:focus, .field select:focus { outline: none; border-color: var(--navy-700); box-shadow: 0 0 0 3px var(--navy-50); }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; }
+  .toggle-question { font-size: 15px; font-weight: 600; color: var(--gray-900); }
+  .switch { position: relative; width: 46px; height: 26px; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider { position: absolute; cursor: pointer; inset: 0; background: var(--gray-300); border-radius: 999px; transition: 0.2s; }
+  .slider::before { content: ""; position: absolute; height: 20px; width: 20px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: 0.2s; }
+  input:checked + .slider { background: var(--navy-700); }
+  input:checked + .slider::before { transform: translateX(20px); }
+
+  .chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px; background: var(--navy-50); color: var(--navy-700);
+    border-radius: 999px; padding: 6px 12px; font-size: 13px; font-weight: 600;
+    box-shadow: inset 0 0 0 1px var(--navy-100);
+  }
+  .chip button { background: none; border: none; color: var(--navy-700); cursor: pointer; font-size: 13px; padding: 0; line-height: 1; opacity: 0.6; }
+  .chip button:hover { opacity: 1; }
+
+  .add-influencer-row { display: flex; gap: 10px; }
+  .add-influencer-row input { flex: 1; }
+  .btn-outline {
+    border: 1px solid var(--gray-300); background: #fff; border-radius: 8px; padding: 10px 16px;
+    font-size: 14px; font-weight: 600; color: var(--gray-700); cursor: pointer; white-space: nowrap;
+  }
+  .btn-outline:hover { background: var(--gray-50); }
+
+  .invite-link { margin-top: 14px; display: inline-block; }
+
+  .campaign-influencer-list { border: 1px solid var(--gray-200); border-radius: 10px; overflow: hidden; margin-top: 8px; }
+  .campaign-influencer-row {
+    display: flex; align-items: center; justify-content: space-between; padding: 12px 16px;
+    border-bottom: 1px solid var(--gray-100); font-size: 14px;
+  }
+  .campaign-influencer-row:last-child { border-bottom: none; }
+  .ci-name { display: flex; align-items: center; gap: 10px; font-weight: 600; color: var(--gray-900); }
+  .ci-avatar { height: 28px; width: 28px; border-radius: 50%; background: var(--navy-700); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+
+  .footer-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 28px; }
+  .btn { border-radius: 8px; padding: 12px 22px; font-size: 14px; font-weight: 600; cursor: pointer; border: 1px solid transparent; }
+  .btn-primary { background: var(--navy-700); color: #fff; }
+  .btn-primary:hover { background: var(--navy-600); }
+  .btn-primary:disabled { background: var(--gray-300); color: var(--gray-500); cursor: not-allowed; }
+  .btn-ghost { background: none; color: var(--gray-500); border: none; font-weight: 600; }
+  .btn-ghost:hover { color: var(--gray-700); }
+  .btn-ghost:disabled { color: var(--gray-300); cursor: not-allowed; }
+
+  /* Modal */
+  .modal-backdrop {
+    display: none; position: fixed; inset: 0; background: rgba(17,24,39,0.4); align-items: center; justify-content: center; z-index: 50;
+  }
+  .modal-backdrop.open { display: flex; }
+  .modal { background: #fff; border-radius: 14px; padding: 28px; width: 380px; max-width: 90vw; }
+  .modal-title { font-size: 17px; font-weight: 700; color: var(--navy-800); margin: 0 0 4px; }
+  .modal-desc { font-size: 13px; color: var(--gray-500); margin: 0 0 20px; }
+  .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; }
+
+  .success-screen { text-align: center; padding: 20px 0 4px; }
+  .success-icon { height: 64px; width: 64px; border-radius: 50%; background: var(--emerald-50); color: var(--emerald-600); display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 20px; }
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <div class="topnav-inner">
+    <div class="brand">
+      <div class="brand-mark">S</div>
+      <span class="brand-name">Sparq</span>
+    </div>
+    <a href="sparq-landing-page.html" class="exit-link">Exit setup</a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="progress" id="progress"></div>
+
+  <!-- STEP 1 -->
+  <div class="panel step-panel" data-step="1">
+    <h2 class="panel-title">Connect your store</h2>
+    <p class="panel-desc">We'll use this to attribute orders back to your influencer campaigns.</p>
+
+    <div class="card-select-grid">
+      <div class="select-card" id="card-shopify">
+        <div class="select-icon">SH</div>
+        <div class="select-name">Shopify</div>
+        <button class="connect-btn" onclick="connectStore('shopify')">Connect</button>
+      </div>
+      <div class="select-card" id="card-woo">
+        <div class="select-icon">WC</div>
+        <div class="select-name">WooCommerce</div>
+        <button class="connect-btn" onclick="connectStore('woo')">Connect</button>
+      </div>
+    </div>
+
+    <button class="link-btn" onclick="toggleManual()">Using a different platform? Set up manually</button>
+    <div class="manual-form" id="manual-form">
+      <div class="field">
+        <label>Webhook URL</label>
+        <input type="text" placeholder="https://yourstore.com/webhooks/orders" />
+      </div>
+      <div class="field" style="margin-bottom:0;">
+        <label>API key</label>
+        <input type="text" placeholder="sk_live_••••••••••••" />
+      </div>
+    </div>
+
+    <div class="footer-nav">
+      <button class="btn-ghost" disabled>Back</button>
+      <button class="btn btn-primary" id="next-1" disabled onclick="goToStep(2)">Next</button>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="panel step-panel" data-step="2" style="display:none;">
+    <h2 class="panel-title">Connect payment gateway</h2>
+    <p class="panel-desc">Optional — helps us attribute orders your store integration might miss.</p>
+
+    <div class="toggle-row" style="border-bottom:1px solid var(--gray-100);">
+      <span class="toggle-question">Do you take orders via WhatsApp, DMs, or Cash on Delivery?</span>
+      <label class="switch">
+        <input type="checkbox" id="cod-toggle" onchange="toggleCod()" />
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div id="cod-section" style="display:none; margin-top:20px;">
+      <div class="card-select-grid">
+        <div class="select-card" id="card-razorpay">
+          <div class="select-icon">RP</div>
+          <div class="select-name">Razorpay</div>
+          <button class="connect-btn" onclick="connectStore('razorpay')">Connect</button>
+        </div>
+        <div class="select-card" id="card-cashfree">
+          <div class="select-icon">CF</div>
+          <div class="select-name">Cashfree</div>
+          <button class="connect-btn" onclick="connectStore('cashfree')">Connect</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-nav">
+      <button class="btn-ghost" onclick="goToStep(1)">Back</button>
+      <button class="btn btn-primary" onclick="goToStep(3)">Next</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="panel step-panel" data-step="3" style="display:none;">
+    <h2 class="panel-title">Add influencers</h2>
+    <p class="panel-desc">Add the Instagram handles of influencers you're working with.</p>
+
+    <div class="add-influencer-row">
+      <input type="text" id="handle-input" placeholder="@instagram_handle" onkeydown="if(event.key==='Enter'){addChip();event.preventDefault();}" />
+      <button class="btn-outline" onclick="addChip()">Add</button>
+    </div>
+    <div class="chip-row" id="chip-row"></div>
+
+    <a class="invite-link link-btn" onclick="openModal()">+ Invite new influencer</a>
+
+    <div class="footer-nav">
+      <button class="btn-ghost" onclick="goToStep(2)">Back</button>
+      <button class="btn btn-primary" id="next-3" disabled onclick="goToStep(4)">Next</button>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="panel step-panel" data-step="4" style="display:none;">
+    <h2 class="panel-title">Create your first campaign</h2>
+    <p class="panel-desc">Set the basics — you can add more details after launch.</p>
+
+    <div class="field">
+      <label>Campaign name</label>
+      <input type="text" id="campaign-name" placeholder="e.g. Diwali Skincare Launch" oninput="checkStep4()" />
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Budget (₹)</label>
+        <input type="number" id="campaign-budget" placeholder="180000" oninput="checkStep4()" />
+      </div>
+      <div class="field">
+        <label>Start date</label>
+        <input type="date" id="campaign-start" oninput="checkStep4()" />
+      </div>
+    </div>
+    <div class="field">
+      <label>End date</label>
+      <input type="date" id="campaign-end" oninput="checkStep4()" />
+    </div>
+
+    <div class="field">
+      <label>Influencers in this campaign</label>
+      <div class="campaign-influencer-list" id="campaign-influencer-list"></div>
+    </div>
+
+    <div class="footer-nav">
+      <button class="btn-ghost" onclick="goToStep(3)">Back</button>
+      <button class="btn btn-primary" id="launch-btn" disabled onclick="launchCampaign()">Launch Campaign</button>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="panel step-panel" data-step="success" style="display:none;">
+    <div class="success-screen">
+      <div class="success-icon">✓</div>
+      <h2 class="panel-title">Campaign launched</h2>
+      <p class="panel-desc">Your campaign is live. Head to the dashboard to watch verified ROI come in.</p>
+      <a href="sparq-campaign-dashboard.html" class="btn btn-primary" style="display:inline-block;">Go to dashboard</a>
+    </div>
+  </div>
+</div>
+
+<!-- Invite modal -->
+<div class="modal-backdrop" id="modal-backdrop">
+  <div class="modal">
+    <h3 class="modal-title">Invite an influencer</h3>
+    <p class="modal-desc">They'll get an email to connect their Instagram and share verified stats.</p>
+    <div class="field">
+      <label>Name</label>
+      <input type="text" id="invite-name" placeholder="Priya Malhotra" />
+    </div>
+    <div class="field" style="margin-bottom:0;">
+      <label>Instagram handle</label>
+      <input type="text" id="invite-handle" placeholder="@priya.glows" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="sendInvite()">Send invite</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const stepLabels = ["Connect store", "Payments", "Influencers", "Campaign"];
+  let currentStep = 1;
+  let connections = { shopify: false, woo: false, razorpay: false, cashfree: false };
+  let handles = [];
+
+  function renderProgress() {
+    const el = document.getElementById("progress");
+    el.innerHTML = "";
+    stepLabels.forEach((label, i) => {
+      const stepNum = i + 1;
+      const state = stepNum < currentStep ? "done" : stepNum === currentStep ? "active" : "";
+      el.innerHTML += `
+        <div class="progress-step">
+          <div class="progress-circle ${state}">${stepNum < currentStep ? "✓" : stepNum}</div>
+          <div class="progress-label ${stepNum === currentStep ? "active" : ""}">${label}</div>
+        </div>
+        ${stepNum < stepLabels.length ? `<div class="progress-line ${stepNum < currentStep ? "done" : ""}"></div>` : ""}
+      `;
+    });
+  }
+
+  function goToStep(step) {
+    document.querySelectorAll(".step-panel").forEach(p => p.style.display = "none");
+    document.querySelector(`.step-panel[data-step="${step}"]`).style.display = "block";
+    currentStep = step;
+    renderProgress();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (step === 4) renderCampaignInfluencers();
+  }
+
+  function connectStore(key) {
+    const cardId = key === "shopify" ? "card-shopify" : key === "woo" ? "card-woo" : key === "razorpay" ? "card-razorpay" : "card-cashfree";
+    const card = document.getElementById(cardId);
+    const btn = card.querySelector(".connect-btn");
+    btn.classList.add("loading");
+    btn.innerHTML = `<span class="spinner"></span>`;
+    setTimeout(() => {
+      connections[key] = true;
+      card.classList.add("connected");
+      btn.outerHTML = `<div class="connect-status">✓ Connected</div>`;
+      if (key === "shopify" || key === "woo") {
+        document.getElementById("next-1").disabled = false;
+      }
+    }, 1100);
+  }
+
+  function toggleManual() {
+    document.getElementById("manual-form").classList.toggle("open");
+  }
+
+  function toggleCod() {
+    const checked = document.getElementById("cod-toggle").checked;
+    document.getElementById("cod-section").style.display = checked ? "block" : "none";
+  }
+
+  function addChip() {
+    const input = document.getElementById("handle-input");
+    let val = input.value.trim();
+    if (!val) return;
+    if (!val.startsWith("@")) val = "@" + val;
+    if (handles.includes(val)) { input.value = ""; return; }
+    handles.push(val);
+    input.value = "";
+    renderChips();
+  }
+
+  function removeChip(handle) {
+    handles = handles.filter(h => h !== handle);
+    renderChips();
+  }
+
+  function renderChips() {
+    const row = document.getElementById("chip-row");
+    row.innerHTML = handles.map(h => `
+      <span class="chip">${h}<button onclick="removeChip('${h}')">✕</button></span>
+    `).join("");
+    document.getElementById("next-3").disabled = handles.length === 0;
+  }
+
+  function openModal() { document.getElementById("modal-backdrop").classList.add("open"); }
+  function closeModal() { document.getElementById("modal-backdrop").classList.remove("open"); }
+  function sendInvite() {
+    const name = document.getElementById("invite-name").value.trim();
+    const handle = document.getElementById("invite-handle").value.trim();
+    if (!handle) { closeModal(); return; }
+    const formatted = handle.startsWith("@") ? handle : "@" + handle;
+    if (!handles.includes(formatted)) { handles.push(formatted); renderChips(); }
+    document.getElementById("invite-name").value = "";
+    document.getElementById("invite-handle").value = "";
+    closeModal();
+  }
+
+  let campaignIncluded = {};
+  function renderCampaignInfluencers() {
+    campaignIncluded = {};
+    handles.forEach(h => campaignIncluded[h] = true);
+    const list = document.getElementById("campaign-influencer-list");
+    if (handles.length === 0) {
+      list.innerHTML = `<div class="campaign-influencer-row" style="color:var(--gray-400);">No influencers added yet</div>`;
+      return;
+    }
+    list.innerHTML = handles.map(h => `
+      <div class="campaign-influencer-row">
+        <div class="ci-name"><span class="ci-avatar">${h.replace("@","").slice(0,2).toUpperCase()}</span>${h}</div>
+        <label class="switch">
+          <input type="checkbox" checked onchange="campaignIncluded['${h}']=this.checked" />
+          <span class="slider"></span>
+        </label>
+      </div>
+    `).join("");
+  }
+
+  function checkStep4() {
+    const name = document.getElementById("campaign-name").value.trim();
+    const budget = document.getElementById("campaign-budget").value;
+    const start = document.getElementById("campaign-start").value;
+    const end = document.getElementById("campaign-end").value;
+    document.getElementById("launch-btn").disabled = !(name && budget && start && end);
+  }
+
+  function launchCampaign() {
+    goToStep("success");
+  }
+
+  renderProgress();
+  renderChips();
+</script>
+</body>
+</html>

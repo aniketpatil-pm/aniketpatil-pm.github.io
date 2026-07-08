@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sparq — Campaign Dashboard</title>
+<style>
+  :root {
+    --navy-800: #172A4C;
+    --navy-700: #1F3864;
+    --navy-600: #2A4A80;
+    --navy-100: #DCE4F0;
+    --navy-50: #EEF2F8;
+    --sky-400: #7DD3FC;
+    --emerald-500: #10B981;
+    --emerald-600: #059669;
+    --emerald-700: #047857;
+    --emerald-50: #ECFDF5;
+    --amber-500: #F59E0B;
+    --amber-700: #B45309;
+    --amber-50: #FFFBEB;
+    --rose-500: #F43F5E;
+    --rose-600: #E11D48;
+    --rose-700: #BE123C;
+    --rose-50: #FFF1F2;
+    --gray-900: #111827;
+    --gray-700: #374151;
+    --gray-500: #6B7280;
+    --gray-400: #9CA3AF;
+    --gray-300: #D1D5DB;
+    --gray-200: #E5E7EB;
+    --gray-100: #F3F4F6;
+    --gray-50: #F9FAFB;
+    --bg: #F7F8FA;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--gray-900);
+  }
+  ::-webkit-scrollbar { height: 8px; width: 8px; }
+  ::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 8px; }
+
+  .topnav {
+    border-bottom: 1px solid var(--gray-200);
+    background: #fff;
+  }
+  .topnav-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand { display: flex; align-items: center; gap: 8px; }
+  .brand-mark {
+    height: 28px; width: 28px; border-radius: 6px;
+    background: var(--navy-700); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px;
+  }
+  .brand-name { font-weight: 700; color: var(--navy-800); font-size: 15px; }
+  .nav-links { display: flex; align-items: center; gap: 22px; font-size: 13.5px; font-weight: 500; color: var(--gray-500); margin-left: 8px; }
+  .nav-links a.active { color: var(--navy-700); font-weight: 700; }
+  .nav-links a:hover { color: var(--navy-700); }
+  @media (max-width: 760px) { .nav-links { display: none; } }
+  .nav-left { display: flex; align-items: center; }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .preview-pill { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gray-500); }
+  .dot { height: 8px; width: 8px; border-radius: 50%; }
+  .dot-emerald { background: var(--emerald-500); }
+  .avatar-round {
+    height: 32px; width: 32px; border-radius: 50%;
+    background: var(--navy-100); color: var(--navy-700);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600;
+  }
+
+  .container { max-width: 1180px; margin: 0 auto; padding: 32px 24px; }
+
+  .header-row {
+    display: flex; flex-wrap: wrap; align-items: flex-start;
+    justify-content: space-between; gap: 16px; margin-bottom: 24px;
+  }
+  .campaign-title-row { display: flex; align-items: center; gap: 12px; }
+  h1 { font-size: 24px; font-weight: 700; color: var(--navy-800); margin: 0; }
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 600;
+    background: var(--emerald-50); color: var(--emerald-700);
+    box-shadow: inset 0 0 0 1px rgba(5,150,105,0.2);
+  }
+  .pulse {
+    height: 6px; width: 6px; border-radius: 50%; background: var(--emerald-500);
+    animation: pulse 1.6s infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+  .meta-row { margin-top: 6px; display: flex; align-items: center; gap: 16px; font-size: 14px; color: var(--gray-500); }
+  .meta-sep { color: var(--gray-300); }
+  .meta-strong { font-weight: 600; color: var(--gray-700); }
+
+  .btn {
+    border-radius: 8px; border: 1px solid var(--gray-300); background: #fff;
+    padding: 9px 16px; font-size: 14px; font-weight: 500; color: var(--gray-700);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03); cursor: pointer;
+  }
+  .btn:hover { background: var(--gray-50); }
+
+  .stat-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;
+  }
+  @media (max-width: 900px) { .stat-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .stat-grid { grid-template-columns: 1fr; } }
+  .stat-card {
+    background: #fff; border: 1px solid var(--gray-200); border-radius: 12px;
+    padding: 18px 20px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  }
+  .stat-label { font-size: 11px; font-weight: 600; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.04em; }
+  .stat-value-row { margin-top: 8px; display: flex; align-items: flex-end; justify-content: space-between; }
+  .stat-value { font-size: 24px; font-weight: 700; color: var(--navy-800); }
+  .trend { display: flex; align-items: center; gap: 2px; font-size: 12px; font-weight: 600; }
+  .trend-up { color: var(--emerald-600); }
+  .trend-down { color: var(--rose-600); }
+
+  .card {
+    background: #fff; border: 1px solid var(--gray-200); border-radius: 12px;
+    padding: 20px; box-shadow: 0 1px 2px rgba(0,0,0,0.03); margin-bottom: 24px;
+  }
+  .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+  .card-title { font-size: 14px; font-weight: 600; color: var(--gray-900); margin: 0; }
+  .card-subtitle { font-size: 12px; color: var(--gray-500); margin: 2px 0 0; }
+  .legend { display: flex; gap: 16px; font-size: 12px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; color: var(--gray-700); }
+  .legend-dot { height: 8px; width: 8px; border-radius: 50%; }
+
+  .tabs { display: flex; gap: 4px; margin-bottom: 12px; border-bottom: 1px solid var(--gray-200); }
+  .tab {
+    padding: 10px 16px; font-size: 14px; font-weight: 500; color: var(--gray-500);
+    background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -1px;
+    cursor: pointer;
+  }
+  .tab.active { color: var(--navy-800); border-bottom-color: var(--navy-700); }
+  .tab-count {
+    margin-left: 6px; border-radius: 999px; padding: 1px 7px; font-size: 11px;
+    background: var(--gray-100); color: var(--gray-500);
+  }
+  .tab.active .tab-count { background: var(--navy-50); color: var(--navy-700); }
+
+  .table-wrap {
+    overflow-x: auto; border: 1px solid var(--gray-200); border-radius: 12px;
+    background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 900px; }
+  thead tr { background: var(--gray-50); border-bottom: 1px solid var(--gray-200); }
+  th {
+    text-align: left; padding: 12px 16px; font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.04em; color: var(--gray-500);
+    cursor: pointer; white-space: nowrap; user-select: none;
+  }
+  th:hover { color: var(--navy-700); }
+  th.right { text-align: right; }
+  .sort-icons { display: inline-flex; flex-direction: column; margin-left: 4px; vertical-align: middle; line-height: 0.6; font-size: 8px; }
+  .sort-icons span { color: var(--gray-300); }
+  .sort-icons span.active { color: var(--navy-700); }
+  tbody tr { border-bottom: 1px solid var(--gray-100); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr.zebra { background: rgba(249,250,251,0.6); }
+  tbody tr:hover { background: var(--navy-50); }
+  td { padding: 12px 16px; white-space: nowrap; color: var(--gray-700); }
+  td.right { text-align: right; font-variant-numeric: tabular-nums; }
+
+  .influencer-cell { display: flex; align-items: center; gap: 10px; }
+  .influencer-avatar {
+    height: 32px; width: 32px; border-radius: 50%; flex-shrink: 0;
+    background: var(--navy-700); color: #fff; font-size: 11px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .influencer-name { font-weight: 500; color: var(--gray-900); font-size: 14px; }
+  .influencer-handle { font-size: 12px; color: var(--gray-500); }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px; border-radius: 999px;
+    padding: 4px 10px; font-size: 12px; font-weight: 600;
+  }
+  .badge-green { background: var(--emerald-50); color: var(--emerald-700); box-shadow: inset 0 0 0 1px rgba(5,150,105,0.2); }
+  .badge-yellow { background: var(--amber-50); color: var(--amber-700); box-shadow: inset 0 0 0 1px rgba(180,83,9,0.2); }
+  .badge-red { background: var(--rose-50); color: var(--rose-700); box-shadow: inset 0 0 0 1px rgba(190,18,60,0.2); }
+  .badge-dot { height: 6px; width: 6px; border-radius: 50%; }
+  .dot-green { background: var(--emerald-500); }
+  .dot-yellow { background: var(--amber-500); }
+  .dot-red { background: var(--rose-500); }
+
+  .roi-chip {
+    display: inline-flex; border-radius: 6px; background: var(--navy-50); color: var(--navy-700);
+    padding: 4px 8px; font-size: 12px; font-weight: 700; box-shadow: inset 0 0 0 1px var(--navy-100);
+    font-variant-numeric: tabular-nums;
+  }
+  .revenue-cell { font-weight: 600; color: var(--gray-900); }
+
+  .footnote { margin-top: 16px; font-size: 12px; color: var(--gray-400); }
+
+  .tooltip {
+    position: absolute; display: none; background: #fff; border: 1px solid var(--gray-200);
+    border-radius: 8px; padding: 8px 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    font-size: 12px; pointer-events: none; z-index: 10; min-width: 140px;
+  }
+  .tooltip-title { font-weight: 600; color: var(--gray-900); margin-bottom: 4px; }
+  .tooltip-row { display: flex; justify-content: space-between; gap: 16px; }
+  .tooltip-label { font-weight: 500; }
+  .tooltip-value { color: var(--gray-700); font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <div class="topnav-inner">
+    <div class="nav-left">
+      <a href="sparq-landing-page.html" class="brand">
+        <div class="brand-mark">S</div>
+        <span class="brand-name">Sparq</span>
+      </a>
+      <div class="nav-links">
+        <a href="sparq-campaign-dashboard.html" class="active">Dashboard</a>
+        <a href="sparq-onboarding.html">Campaigns</a>
+        <a href="sparq-influencer.html">Influencers</a>
+        <a href="#">Settings</a>
+      </div>
+    </div>
+    <div class="nav-right">
+      <div class="preview-pill"><span class="dot dot-emerald"></span> Prototype preview</div>
+      <div class="avatar-round">AK</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="header-row">
+    <div>
+      <div class="campaign-title-row">
+        <h1>Diwali Skincare Launch</h1>
+        <span class="status-badge"><span class="pulse"></span>Live</span>
+      </div>
+      <div class="meta-row">
+        <span>Oct 12 – Oct 25, 2026</span>
+        <span class="meta-sep">|</span>
+        <span>Budget: <span class="meta-strong">₹1,80,000</span></span>
+      </div>
+    </div>
+    <button class="btn">Download Report</button>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-label">Total Reach</div>
+      <div class="stat-value-row"><div class="stat-value">1.2M</div><div class="trend trend-up">▲ 12.4%</div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Engagement</div>
+      <div class="stat-value-row"><div class="stat-value">48K</div><div class="trend trend-up">▲ 8.1%</div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Orders Attributed</div>
+      <div class="stat-value-row"><div class="stat-value">312</div><div class="trend trend-up">▲ 5.6%</div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Revenue Attributed</div>
+      <div class="stat-value-row"><div class="stat-value">₹4.8L</div><div class="trend trend-down">▼ 2.3%</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <p class="card-title">Daily performance</p>
+        <p class="card-subtitle">Orders and revenue attributed, Oct 12 – Oct 25</p>
+      </div>
+      <div class="legend">
+        <div class="legend-item"><span class="legend-dot" style="background: var(--navy-700);"></span>Revenue</div>
+        <div class="legend-item"><span class="legend-dot" style="background: var(--sky-400);"></span>Orders</div>
+      </div>
+    </div>
+    <div style="position: relative;">
+      <svg id="chart" viewBox="0 0 900 280" style="width:100%; height:280px; overflow: visible;"></svg>
+      <div class="tooltip" id="tooltip"></div>
+    </div>
+  </div>
+
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-filter="all">All influencers <span class="tab-count" id="count-all"></span></button>
+    <button class="tab" data-filter="top">Top performers <span class="tab-count" id="count-top"></span></button>
+    <button class="tab" data-filter="flagged">Flagged for low authenticity <span class="tab-count" id="count-flagged"></span></button>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr id="table-head"></tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+  </div>
+
+  <p class="footnote">All figures are illustrative prototype data.</p>
+</div>
+
+<script>
+  // ---------- Mock data ----------
+  const dailyData = [
+    { day: "Oct 12", orders: 14, revenue: 18200 },
+    { day: "Oct 13", orders: 19, revenue: 24800 },
+    { day: "Oct 14", orders: 22, revenue: 29500 },
+    { day: "Oct 15", orders: 18, revenue: 23100 },
+    { day: "Oct 16", orders: 27, revenue: 35600 },
+    { day: "Oct 17", orders: 31, revenue: 41200 },
+    { day: "Oct 18", orders: 35, revenue: 47800 },
+    { day: "Oct 19", orders: 24, revenue: 31900 },
+    { day: "Oct 20", orders: 21, revenue: 27400 },
+    { day: "Oct 21", orders: 29, revenue: 38700 },
+    { day: "Oct 22", orders: 33, revenue: 44500 },
+    { day: "Oct 23", orders: 26, revenue: 34200 },
+    { day: "Oct 24", orders: 20, revenue: 26300 },
+    { day: "Oct 25", orders: 13, revenue: 16700 },
+  ];
+
+  const influencers = [
+    { id: 1, name: "Priya Malhotra", handle: "@priya.glows", avatar: "PM", score: 92, reach: 210000, engagement: 5.8, orders: 68, revenue: 104200, cost: 22000 },
+    { id: 2, name: "Ananya Rao", handle: "@ananya.skincare", avatar: "AR", score: 88, reach: 156000, engagement: 6.2, orders: 54, revenue: 87600, cost: 18000 },
+    { id: 3, name: "Kabir Sethi", handle: "@kabirstyle", avatar: "KS", score: 74, reach: 98000, engagement: 4.1, orders: 31, revenue: 48900, cost: 15000 },
+    { id: 4, name: "Meher Kapoor", handle: "@meher.beauty", avatar: "MK", score: 65, reach: 142000, engagement: 3.4, orders: 27, revenue: 39500, cost: 20000 },
+    { id: 5, name: "Riya Bansal", handle: "@riyab_", avatar: "RB", score: 43, reach: 187000, engagement: 2.1, orders: 19, revenue: 22100, cost: 24000 },
+    { id: 6, name: "Devika Nair", handle: "@devika.dailies", avatar: "DN", score: 81, reach: 76000, engagement: 5.4, orders: 38, revenue: 61300, cost: 12500 },
+    { id: 7, name: "Aarav Mehta", handle: "@aarav.grooms", avatar: "AM", score: 35, reach: 64000, engagement: 1.8, orders: 11, revenue: 13800, cost: 9000 },
+    { id: 8, name: "Sanya Kohli", handle: "@sanyakohli", avatar: "SK", score: 90, reach: 132000, engagement: 6.9, orders: 44, revenue: 79200, cost: 16000 },
+    { id: 9, name: "Ishaan Verma", handle: "@ishaan.v", avatar: "IV", score: 58, reach: 51000, engagement: 3.0, orders: 12, revenue: 15600, cost: 8500 },
+    { id: 10, name: "Tara Chopra", handle: "@tarachopra", avatar: "TC", score: 96, reach: 245000, engagement: 7.4, orders: 71, revenue: 128900, cost: 25000 },
+  ];
+
+  const columns = [
+    { key: "name", label: "Influencer", align: "left" },
+    { key: "score", label: "Authenticity", align: "left" },
+    { key: "reach", label: "Reach", align: "right" },
+    { key: "engagement", label: "Engagement", align: "right" },
+    { key: "orders", label: "Orders", align: "right" },
+    { key: "revenue", label: "Revenue", align: "right" },
+    { key: "cost", label: "Cost Paid", align: "right" },
+    { key: "roi", label: "ROI", align: "right" },
+  ];
+
+  // ---------- Helpers ----------
+  function fmtINR(n) { return "₹" + n.toLocaleString("en-IN"); }
+  function fmtCompact(n) {
+    if (n >= 100000) return (n / 100000).toFixed(1).replace(/\.0$/, "") + "L";
+    if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "K";
+    return n.toString();
+  }
+  function roi(rev, cost) { return rev / cost; }
+  function scoreBadgeClass(score) {
+    if (score >= 80) return "badge-green";
+    if (score >= 50) return "badge-yellow";
+    return "badge-red";
+  }
+  function scoreDotClass(score) {
+    if (score >= 80) return "dot-green";
+    if (score >= 50) return "dot-yellow";
+    return "dot-red";
+  }
+
+  // ---------- State ----------
+  let filter = "all";
+  let sortKey = "revenue";
+  let sortDir = "desc";
+
+  // ---------- Table rendering ----------
+  function renderHead() {
+    const head = document.getElementById("table-head");
+    head.innerHTML = "";
+    columns.forEach((col) => {
+      const th = document.createElement("th");
+      th.className = col.align === "right" ? "right" : "";
+      th.dataset.key = col.key;
+      const activeAsc = sortKey === col.key && sortDir === "asc";
+      const activeDesc = sortKey === col.key && sortDir === "desc";
+      th.innerHTML = col.label + '<span class="sort-icons"><span class="' + (activeAsc ? "active" : "") + '">▲</span><span class="' + (activeDesc ? "active" : "") + '">▼</span></span>';
+      th.addEventListener("click", () => {
+        if (sortKey === col.key) {
+          sortDir = sortDir === "asc" ? "desc" : "asc";
+        } else {
+          sortKey = col.key;
+          sortDir = "desc";
+        }
+        renderAll();
+      });
+      head.appendChild(th);
+    });
+  }
+
+  function getFiltered() {
+    if (filter === "top") return influencers.filter((i) => i.score >= 80);
+    if (filter === "flagged") return influencers.filter((i) => i.score < 50);
+    return influencers.slice();
+  }
+
+  function getSorted(rows) {
+    const arr = rows.slice();
+    arr.sort((a, b) => {
+      let av, bv;
+      if (sortKey === "roi") { av = roi(a.revenue, a.cost); bv = roi(b.revenue, b.cost); }
+      else if (sortKey === "name") { av = a.name; bv = b.name; }
+      else { av = a[sortKey]; bv = b[sortKey]; }
+      if (typeof av === "string") return sortDir === "asc" ? av.localeCompare(bv) : bv.localeCompare(av);
+      return sortDir === "asc" ? av - bv : bv - av;
+    });
+    return arr;
+  }
+
+  function renderBody() {
+    const body = document.getElementById("table-body");
+    body.innerHTML = "";
+    const rows = getSorted(getFiltered());
+    rows.forEach((inf, idx) => {
+      const tr = document.createElement("tr");
+      if (idx % 2 === 1) tr.classList.add("zebra");
+      tr.innerHTML = `
+        <td>
+          <div class="influencer-cell">
+            <div class="influencer-avatar">${inf.avatar}</div>
+            <div>
+              <div class="influencer-name">${inf.name}</div>
+              <div class="influencer-handle">${inf.handle}</div>
+            </div>
+          </div>
+        </td>
+        <td><span class="badge ${scoreBadgeClass(inf.score)}"><span class="badge-dot ${scoreDotClass(inf.score)}"></span>${inf.score}</span></td>
+        <td class="right">${fmtCompact(inf.reach)}</td>
+        <td class="right">${inf.engagement}%</td>
+        <td class="right">${inf.orders}</td>
+        <td class="right revenue-cell">${fmtINR(inf.revenue)}</td>
+        <td class="right">${fmtINR(inf.cost)}</td>
+        <td class="right"><span class="roi-chip">${roi(inf.revenue, inf.cost).toFixed(1)}x</span></td>
+      `;
+      body.appendChild(tr);
+    });
+  }
+
+  function renderTabs() {
+    document.getElementById("count-all").textContent = influencers.length;
+    document.getElementById("count-top").textContent = influencers.filter((i) => i.score >= 80).length;
+    document.getElementById("count-flagged").textContent = influencers.filter((i) => i.score < 50).length;
+    document.querySelectorAll(".tab").forEach((tab) => {
+      tab.classList.toggle("active", tab.dataset.filter === filter);
+    });
+  }
+
+  document.querySelectorAll(".tab").forEach((tab) => {
+    tab.addEventListener("click", () => {
+      filter = tab.dataset.filter;
+      renderAll();
+    });
+  });
+
+  function renderAll() {
+    renderHead();
+    renderBody();
+    renderTabs();
+  }
+
+  // ---------- Chart (hand-drawn SVG line chart) ----------
+  function renderChart() {
+    const svg = document.getElementById("chart");
+    const tooltip = document.getElementById("tooltip");
+    const W = 900, H = 280;
+    const padL = 44, padR = 44, padT = 10, padB = 30;
+    const plotW = W - padL - padR;
+    const plotH = H - padT - padB;
+
+    const maxRevenue = Math.max(...dailyData.map(d => d.revenue)) * 1.15;
+    const maxOrders = Math.max(...dailyData.map(d => d.orders)) * 1.25;
+
+    const xStep = plotW / (dailyData.length - 1);
+    const xAt = (i) => padL + i * xStep;
+    const yAtRevenue = (v) => padT + plotH - (v / maxRevenue) * plotH;
+    const yAtOrders = (v) => padT + plotH - (v / maxOrders) * plotH;
+
+    let svgHtml = "";
+
+    // gridlines
+    const gridCount = 4;
+    for (let g = 0; g <= gridCount; g++) {
+      const y = padT + (plotH / gridCount) * g;
+      svgHtml += `<line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="#EEF0F3" stroke-width="1" />`;
+    }
+
+    // x-axis labels (every other day to avoid crowding)
+    dailyData.forEach((d, i) => {
+      if (i % 2 === 0 || i === dailyData.length - 1) {
+        svgHtml += `<text x="${xAt(i)}" y="${H - 8}" font-size="10.5" fill="#6B7280" text-anchor="middle">${d.day}</text>`;
+      }
+    });
+
+    // y-axis labels (revenue, left)
+    for (let g = 0; g <= gridCount; g++) {
+      const val = maxRevenue - (maxRevenue / gridCount) * g;
+      const y = padT + (plotH / gridCount) * g;
+      svgHtml += `<text x="${padL - 8}" y="${y + 3}" font-size="10.5" fill="#6B7280" text-anchor="end">${fmtCompact(Math.round(val))}</text>`;
+    }
+
+    // revenue line
+    let revPath = "";
+    dailyData.forEach((d, i) => {
+      const x = xAt(i), y = yAtRevenue(d.revenue);
+      revPath += (i === 0 ? "M" : "L") + x + "," + y + " ";
+    });
+    svgHtml += `<path d="${revPath}" fill="none" stroke="#1F3864" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" />`;
+
+    // orders line
+    let ordPath = "";
+    dailyData.forEach((d, i) => {
+      const x = xAt(i), y = yAtOrders(d.orders);
+      ordPath += (i === 0 ? "M" : "L") + x + "," + y + " ";
+    });
+    svgHtml += `<path d="${ordPath}" fill="none" stroke="#7DD3FC" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" />`;
+
+    // hover targets
+    dailyData.forEach((d, i) => {
+      const x = xAt(i);
+      const yr = yAtRevenue(d.revenue);
+      const yo = yAtOrders(d.orders);
+      svgHtml += `<circle class="hover-dot" data-idx="${i}" cx="${x}" cy="${yr}" r="3.5" fill="#1F3864" opacity="0" />`;
+      svgHtml += `<circle class="hover-dot" data-idx="${i}" cx="${x}" cy="${yo}" r="3.5" fill="#7DD3FC" opacity="0" />`;
+      svgHtml += `<rect class="hover-zone" data-idx="${i}" x="${x - xStep/2}" y="${padT}" width="${xStep}" height="${plotH}" fill="transparent" style="cursor:pointer" />`;
+    });
+
+    svg.innerHTML = svgHtml;
+
+    svg.querySelectorAll(".hover-zone").forEach((zone) => {
+      zone.addEventListener("mouseenter", (e) => {
+        const idx = +zone.dataset.idx;
+        const d = dailyData[idx];
+        svg.querySelectorAll(".hover-dot").forEach(dot => {
+          dot.setAttribute("opacity", (+dot.dataset.idx === idx) ? "1" : "0");
+        });
+        tooltip.innerHTML = `
+          <div class="tooltip-title">${d.day}</div>
+          <div class="tooltip-row"><span class="tooltip-label" style="color:#1F3864;">Revenue</span><span class="tooltip-value">${fmtINR(d.revenue)}</span></div>
+          <div class="tooltip-row"><span class="tooltip-label" style="color:#0EA5E9;">Orders</span><span class="tooltip-value">${d.orders}</span></div>
+        `;
+        tooltip.style.display = "block";
+      });
+      zone.addEventListener("mousemove", (e) => {
+        const rect = svg.getBoundingClientRect();
+        const wrapRect = svg.parentElement.getBoundingClientRect();
+        const relX = e.clientX - wrapRect.left;
+        const relY = e.clientY - wrapRect.top;
+        tooltip.style.left = Math.min(relX + 12, wrapRect.width - 150) + "px";
+        tooltip.style.top = Math.max(relY - 50, 0) + "px";
+      });
+      zone.addEventListener("mouseleave", () => {
+        svg.querySelectorAll(".hover-dot").forEach(dot => dot.setAttribute("opacity", "0"));
+        tooltip.style.display = "none";
+      });
+    });
+  }
+
+  renderAll();
+  renderChart();
+</script>
+</body>
+</html>

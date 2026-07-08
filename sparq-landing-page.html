@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sparq — Know if your influencer campaigns actually worked</title>
+<style>
+  :root {
+    --navy-800: #172A4C;
+    --navy-700: #1F3864;
+    --navy-600: #2A4A80;
+    --navy-100: #DCE4F0;
+    --navy-50: #EEF2F8;
+    --sky-500: #0EA5E9;
+    --sky-400: #7DD3FC;
+    --emerald-500: #10B981;
+    --emerald-600: #059669;
+    --emerald-700: #047857;
+    --emerald-50: #ECFDF5;
+    --amber-500: #F59E0B;
+    --amber-700: #B45309;
+    --amber-50: #FFFBEB;
+    --rose-500: #F43F5E;
+    --rose-700: #BE123C;
+    --rose-50: #FFF1F2;
+    --gray-900: #111827;
+    --gray-700: #374151;
+    --gray-500: #6B7280;
+    --gray-400: #9CA3AF;
+    --gray-300: #D1D5DB;
+    --gray-200: #E5E7EB;
+    --gray-100: #F3F4F6;
+    --gray-50: #F9FAFB;
+    --bg: #FFFFFF;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--gray-900);
+    line-height: 1.5;
+  }
+  a { text-decoration: none; color: inherit; }
+  .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+  /* Nav */
+  .topnav { border-bottom: 1px solid var(--gray-200); position: sticky; top: 0; background: #fff; z-index: 20; }
+  .topnav-inner { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; max-width: 1180px; margin: 0 auto; }
+  .brand { display: flex; align-items: center; gap: 8px; }
+  .brand-mark { height: 30px; width: 30px; border-radius: 7px; background: var(--navy-700); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; }
+  .brand-name { font-weight: 700; color: var(--navy-800); font-size: 17px; }
+  .nav-links { display: flex; align-items: center; gap: 28px; font-size: 14px; font-weight: 500; color: var(--gray-700); }
+  .nav-links a:hover { color: var(--navy-700); }
+  .nav-cta { display: flex; align-items: center; gap: 12px; }
+  @media (max-width: 760px) { .nav-links { display: none; } }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 8px; padding: 11px 20px; font-size: 14px; font-weight: 600;
+    cursor: pointer; border: 1px solid transparent; white-space: nowrap;
+  }
+  .btn-primary { background: var(--navy-700); color: #fff; }
+  .btn-primary:hover { background: var(--navy-600); }
+  .btn-secondary { background: #fff; color: var(--gray-700); border-color: var(--gray-300); }
+  .btn-secondary:hover { background: var(--gray-50); }
+  .btn-lg { padding: 14px 26px; font-size: 15px; }
+
+  /* Hero */
+  .hero { padding: 88px 24px 64px; text-align: center; background: linear-gradient(180deg, #FBFCFE 0%, #FFFFFF 100%); }
+  .hero-inner { max-width: 780px; margin: 0 auto; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600;
+    color: var(--navy-700); background: var(--navy-50); border-radius: 999px; padding: 5px 12px;
+    margin-bottom: 20px; box-shadow: inset 0 0 0 1px var(--navy-100);
+  }
+  h1.headline { font-size: 46px; font-weight: 800; color: var(--navy-800); margin: 0 0 18px; letter-spacing: -0.02em; line-height: 1.15; }
+  .subheadline { font-size: 17px; color: var(--gray-500); max-width: 620px; margin: 0 auto 32px; }
+  .hero-ctas { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+  @media (max-width: 560px) { h1.headline { font-size: 32px; } .subheadline { font-size: 15px; } }
+
+  /* Problem section */
+  .section { padding: 72px 24px; }
+  .section-alt { background: var(--gray-50); }
+  .section-head { max-width: 620px; margin: 0 auto 44px; text-align: center; }
+  .section-eyebrow { font-size: 12px; font-weight: 700; color: var(--navy-700); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+  .section-title { font-size: 30px; font-weight: 800; color: var(--navy-800); margin: 0 0 10px; letter-spacing: -0.01em; }
+  .section-desc { font-size: 15px; color: var(--gray-500); }
+
+  .problem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1080px; margin: 0 auto; }
+  @media (max-width: 860px) { .problem-grid { grid-template-columns: 1fr; } }
+  .problem-card { background: #fff; border: 1px solid var(--gray-200); border-radius: 14px; padding: 26px; }
+  .problem-icon {
+    height: 40px; width: 40px; border-radius: 10px; background: var(--rose-50); color: var(--rose-700);
+    display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 16px;
+  }
+  .problem-card:nth-child(2) .problem-icon { background: var(--amber-50); color: var(--amber-700); }
+  .problem-card:nth-child(3) .problem-icon { background: var(--navy-50); color: var(--navy-700); }
+  .problem-title { font-size: 15.5px; font-weight: 700; color: var(--gray-900); margin: 0 0 8px; }
+  .problem-text { font-size: 14px; color: var(--gray-500); margin: 0; }
+
+  /* How it works */
+  .steps-flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 1080px; margin: 0 auto; position: relative; }
+  @media (max-width: 860px) { .steps-flow { grid-template-columns: 1fr; } }
+  .step-card { position: relative; text-align: center; padding: 0 12px; }
+  .step-num { font-size: 12px; font-weight: 700; color: var(--sky-500); margin-bottom: 10px; }
+  .step-icon {
+    height: 52px; width: 52px; border-radius: 14px; background: var(--navy-700); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto 14px;
+  }
+  .step-title { font-size: 15px; font-weight: 700; color: var(--gray-900); margin: 0 0 6px; }
+  .step-text { font-size: 13px; color: var(--gray-500); margin: 0; }
+  .step-arrow { display: none; }
+  @media (min-width: 861px) {
+    .step-arrow {
+      display: block; position: absolute; top: 26px; right: -26px; color: var(--gray-300); font-size: 20px;
+    }
+  }
+
+  /* Dashboard preview */
+  .preview-wrap { max-width: 980px; margin: 0 auto; }
+  .preview-card {
+    background: #fff; border: 1px solid var(--gray-200); border-radius: 16px; padding: 24px;
+    box-shadow: 0 20px 50px rgba(23,42,76,0.08);
+  }
+  .preview-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .preview-campaign { font-size: 15px; font-weight: 700; color: var(--navy-800); }
+  .preview-status {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600;
+    background: var(--emerald-50); color: var(--emerald-700); border-radius: 999px; padding: 3px 10px;
+    box-shadow: inset 0 0 0 1px rgba(5,150,105,0.2); margin-left: 10px;
+  }
+  .preview-stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+  @media (max-width: 760px) { .preview-stats { grid-template-columns: repeat(2, 1fr); } }
+  .preview-stat { background: var(--gray-50); border-radius: 10px; padding: 14px 16px; }
+  .preview-stat-label { font-size: 10.5px; font-weight: 600; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.04em; }
+  .preview-stat-value { font-size: 19px; font-weight: 700; color: var(--navy-800); margin-top: 4px; }
+  .preview-stat-value.accent { color: var(--sky-500); }
+
+  /* Pricing */
+  .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1000px; margin: 0 auto; align-items: stretch; }
+  @media (max-width: 860px) { .pricing-grid { grid-template-columns: 1fr; } }
+  .price-card { background: #fff; border: 1px solid var(--gray-200); border-radius: 14px; padding: 28px; display: flex; flex-direction: column; }
+  .price-card.featured { border: 2px solid var(--navy-700); position: relative; box-shadow: 0 12px 30px rgba(31,56,100,0.1); }
+  .featured-tag {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: var(--navy-700); color: #fff; font-size: 11px; font-weight: 700;
+    padding: 4px 12px; border-radius: 999px;
+  }
+  .price-tier { font-size: 13px; font-weight: 700; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+  .price-desc { font-size: 13.5px; color: var(--gray-500); margin: 0 0 20px; min-height: 40px; }
+  .price-limits { list-style: none; padding: 0; margin: 0 0 24px; flex-grow: 1; }
+  .price-limits li { font-size: 14px; color: var(--gray-700); padding: 7px 0; display: flex; gap: 8px; }
+  .price-limits li::before { content: "✓"; color: var(--emerald-600); font-weight: 700; }
+
+  /* Footer */
+  .footer { border-top: 1px solid var(--gray-200); padding: 40px 24px; }
+  .footer-inner { max-width: 1180px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+  .footer-links { display: flex; gap: 28px; font-size: 14px; color: var(--gray-500); flex-wrap: wrap; }
+  .footer-links a:hover { color: var(--navy-700); }
+  .footer-copy { font-size: 13px; color: var(--gray-400); }
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <div class="topnav-inner">
+    <div class="brand">
+      <div class="brand-mark">S</div>
+      <span class="brand-name">Sparq</span>
+    </div>
+    <div class="nav-links">
+      <a href="#problem">Product</a>
+      <a href="#how-it-works">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="sparq-influencer.html">For influencers</a>
+    </div>
+    <div class="nav-cta">
+      <a href="sparq-campaign-dashboard.html" class="btn btn-secondary">Log in</a>
+      <a href="sparq-onboarding.html" class="btn btn-primary">See a live demo</a>
+    </div>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="hero-inner">
+    <span class="eyebrow">Built for how India actually buys</span>
+    <h1 class="headline">Know if your influencer campaigns actually worked.</h1>
+    <p class="subheadline">Verified authenticity scores and real, attributed ROI for D2C brands — built for how India actually buys: Shopify, WhatsApp, and COD.</p>
+    <div class="hero-ctas">
+      <a href="sparq-onboarding.html" class="btn btn-primary btn-lg">See a live demo</a>
+      <a href="#how-it-works" class="btn btn-secondary btn-lg">How it works</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="problem">
+  <div class="section-head">
+    <div class="section-eyebrow">The problem</div>
+    <h2 class="section-title">Influencer marketing runs on guesswork</h2>
+    <p class="section-desc">Most brands can't answer a basic question: did this campaign actually drive revenue?</p>
+  </div>
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="problem-icon">⚠</div>
+      <h3 class="problem-title">Fake followers, bought engagement</h3>
+      <p class="problem-text">Follower counts and like rates are easy to inflate. Brands pay for reach that was never real.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">◎</div>
+      <h3 class="problem-title">Promo codes miss WhatsApp and COD</h3>
+      <p class="problem-text">Standard e-commerce tracking breaks down the moment a sale happens outside checkout — which is often, in India.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">▤</div>
+      <h3 class="problem-title">ROI reporting is a spreadsheet exercise</h3>
+      <p class="problem-text">Marketing teams stitch together screenshots, DMs, and gut feel to justify spend after the fact.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="how-it-works">
+  <div class="section-head">
+    <div class="section-eyebrow">How Sparq works</div>
+    <h2 class="section-title">From campaign to verified report, in four steps</h2>
+  </div>
+  <div class="steps-flow">
+    <div class="step-card">
+      <div class="step-num">STEP 1</div>
+      <div class="step-icon">🛒</div>
+      <h3 class="step-title">Connect your store</h3>
+      <p class="step-text">Shopify or WooCommerce, in minutes.</p>
+      <span class="step-arrow">→</span>
+    </div>
+    <div class="step-card">
+      <div class="step-num">STEP 2</div>
+      <div class="step-icon">👤</div>
+      <h3 class="step-title">Connect your influencers</h3>
+      <p class="step-text">Add handles or invite them to join.</p>
+      <span class="step-arrow">→</span>
+    </div>
+    <div class="step-card">
+      <div class="step-num">STEP 3</div>
+      <div class="step-icon">▶</div>
+      <h3 class="step-title">Run the campaign</h3>
+      <p class="step-text">Sparq tracks orders and engagement as it runs.</p>
+      <span class="step-arrow">→</span>
+    </div>
+    <div class="step-card">
+      <div class="step-num">STEP 4</div>
+      <div class="step-icon">✓</div>
+      <h3 class="step-title">Get a verified ROI report</h3>
+      <p class="step-text">Authenticity scores and attributed revenue, per influencer.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <div class="section-eyebrow">See it in action</div>
+    <h2 class="section-title">One dashboard, every campaign's real numbers</h2>
+  </div>
+  <div class="preview-wrap">
+    <a href="sparq-campaign-dashboard.html" class="preview-card" style="display:block;">
+      <div class="preview-topbar">
+        <div>
+          <span class="preview-campaign">Diwali Skincare Launch</span>
+          <span class="preview-status">● Live</span>
+        </div>
+        <span style="font-size:13px; color:var(--gray-500);">Oct 12 – Oct 25, 2026</span>
+      </div>
+      <div class="preview-stats">
+        <div class="preview-stat">
+          <div class="preview-stat-label">Reach</div>
+          <div class="preview-stat-value">1.2M</div>
+        </div>
+        <div class="preview-stat">
+          <div class="preview-stat-label">Engagement</div>
+          <div class="preview-stat-value">48K</div>
+        </div>
+        <div class="preview-stat">
+          <div class="preview-stat-label">Orders</div>
+          <div class="preview-stat-value">312</div>
+        </div>
+        <div class="preview-stat">
+          <div class="preview-stat-label">Revenue</div>
+          <div class="preview-stat-value">₹4.8L</div>
+        </div>
+        <div class="preview-stat">
+          <div class="preview-stat-label">ROI</div>
+          <div class="preview-stat-value accent">4.2x</div>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<section class="section section-alt" id="pricing">
+  <div class="section-head">
+    <div class="section-eyebrow">Pricing</div>
+    <h2 class="section-title">Straightforward plans, no self-serve surprises</h2>
+    <p class="section-desc">Every plan includes verified authenticity scoring and full-funnel ROI attribution.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-tier">Starter</div>
+      <p class="price-desc">For brands running their first tracked campaigns.</p>
+      <ul class="price-limits">
+        <li>Up to 3 active campaigns</li>
+        <li>Up to 25 influencers</li>
+        <li>Shopify or WooCommerce integration</li>
+        <li>Standard ROI reporting</li>
+      </ul>
+      <a href="sparq-onboarding.html" class="btn btn-secondary">Talk to us</a>
+    </div>
+    <div class="price-card featured">
+      <span class="featured-tag">Most popular</span>
+      <div class="price-tier">Growth</div>
+      <p class="price-desc">For teams running influencer marketing at scale.</p>
+      <ul class="price-limits">
+        <li>Up to 15 active campaigns</li>
+        <li>Up to 150 influencers</li>
+        <li>WhatsApp / COD order attribution</li>
+        <li>Authenticity scoring, all influencers</li>
+        <li>Priority support</li>
+      </ul>
+      <a href="sparq-onboarding.html" class="btn btn-primary">Talk to us</a>
+    </div>
+    <div class="price-card">
+      <div class="price-tier">Scale</div>
+      <p class="price-desc">For multi-brand portfolios and agencies.</p>
+      <ul class="price-limits">
+        <li>Unlimited campaigns</li>
+        <li>Unlimited influencers</li>
+        <li>Multi-brand workspace</li>
+        <li>Dedicated account manager</li>
+        <li>Custom reporting exports</li>
+      </ul>
+      <a href="sparq-onboarding.html" class="btn btn-secondary">Talk to us</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer" id="footer">
+  <div class="footer-inner">
+    <div class="brand">
+      <div class="brand-mark">S</div>
+      <span class="brand-name">Sparq</span>
+    </div>
+    <div class="footer-links">
+      <a href="#problem">Product</a>
+      <a href="#pricing">Pricing</a>
+      <a href="sparq-influencer.html">For influencers</a>
+      <a href="sparq-campaign-dashboard.html">Live demo</a>
+    </div>
+    <div class="footer-copy">© 2026 Sparq. All rights reserved.</div>
+  </div>
+</footer>
+
+</body>
+</html>
