@@ -483,6 +483,17 @@
       transition: gap 0.2s;
     }
     .project-link:hover { gap: 0.6rem; }
+    .project-link-prototype {
+      background: var(--emerald);
+      color: var(--white) !important;
+      padding: 0.45rem 1rem;
+      border-radius: 6px;
+      transition: background 0.2s, gap 0.2s, transform 0.15s !important;
+    }
+    .project-link-prototype:hover {
+      background: #047857;
+      transform: translateY(-1px);
+    }
 
     /* ── SKILLS ─────────────────────────────────── */
     .skills-section { background: var(--white); }
@@ -694,6 +705,9 @@
       background: var(--ink);
       padding: 3rem 6%;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     .ft-name {
       font-size: 1.4rem;
@@ -701,10 +715,24 @@
       color: var(--white);
       letter-spacing: -0.02em;
       margin-bottom: 0.2rem;
+      text-align: center;
     }
     .ft-name span { color: var(--emerald); }
-    .ft-role { font-size: 0.78rem; color: rgba(255,255,255,0.3); margin-bottom: 1.8rem; }
-    .ft-links { display: flex; gap: 3rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap; }
+    .ft-role {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 1.8rem;
+      text-align: center;
+    }
+    .ft-links {
+      display: flex;
+      gap: 3rem;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      width: 100%;
+    }
     .ft-link {
       display: flex; flex-direction: column; align-items: center; gap: 0.65rem;
       text-decoration: none; cursor: none;
@@ -786,7 +814,7 @@
       height: 300px;
       border-radius: 14px 14px 0 0;
       object-fit: cover;
-      object-position: center 18%;
+      object-position: center 10%;
       box-shadow: 0 12px 40px rgba(0,0,0,0.12);
       display: block;
       animation: fadeSlideUp 0.9s ease 0.5s both;
@@ -1116,6 +1144,13 @@
     <h2 class="section-title">Product thinking in <em>action</em></h2>
     <div class="projects-grid">
       <div class="project-card reveal">
+        <p class="project-meta">D2C <span>·</span> Influencer Marketing <span>·</span> India-first</p>
+        <h3>Sparq: Verified ROI & Attribution for Influencer Marketing</h3>
+        <p>Sparq plugs into a brand's existing influencer campaigns and delivers two things nobody else does well — a verified authenticity score for the influencer's audience, and real attributed sales data including WhatsApp and COD orders that standard tracking tools miss. Built for mid-market D2C brands who need to know if a campaign actually worked.</p>
+        <a href="sparq.html" target="_blank" class="project-link project-link-prototype">View Prototype →</a>
+      </div>
+
+      <div class="project-card reveal reveal-d1">
         <p class="project-meta">Healthcare <span>·</span> Remote Care <span>·</span> India</p>
         <h3>CareNest: Bringing Families, Patients & Doctors Closer</h3>
         <p>A product thinking case study proposing a remote personal care platform for India's elderly — where a dedicated Care Navigator bridges the patient, their family, and their doctor through weekly home visits, daily check-ins, and a WhatsApp-first interface. Covers problem framing, user personas, journey mapping, business model, and success metrics.</p>
